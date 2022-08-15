@@ -1,0 +1,34 @@
+﻿<Page
+    x:Class="FlowFill.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FlowFill"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid Background="White" Height="500" Width="500">
+            <InkCanvas x:Name="inkCanvas" Height="500" Width="500"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Button Click="DrawSmallButton_Click">Draw small</Button>
+            <Button Click="DrawBigButton_Click">Draw BIG</Button>
+            <Button Click="DrawTriangleButton_Click">Draw Triangle</Button>
+            <AppBarSeparator/>
+            <Button Click="PrintButton_Click">Print</Button>
+            <Button Click="PrintFillButton_Click">Print Fill</Button>
+            <AppBarSeparator/>
+            <Button x:Name="BoundaryFill" Click="BoundaryFillButton_Click">Boundary Fill Points</Button>
+            <Button Click="BoundaryFillExecuteButton_Click">Execute Boundary Fill</Button>
+            <AppBarSeparator/>
+            <Button x:Name="ScanFill" Click="ScanFillButton_Click">Scanline Fill Points</Button>
+            <Button Click="ScanFillExecuteButton_Click">Execute Scanline Fill</Button>
+            <AppBarSeparator/>
+            <Button Click="ClearButton_Click">Clear</Button>
+        </StackPanel>
+        <ScrollViewer VerticalAlignment="Center" Height="800" VerticalScrollBarVisibility="Visible" VerticalScrollMode="Enabled" HorizontalAlignment="Left">
+          <TextBlock x:Name="Logs" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollMode="Enabled"/>
+        </ScrollViewer>
+    </Grid>
+</Page>
