@@ -17,7 +17,7 @@ namespace FlowFill.Services
         private int Width;
         private int Height;
         private HashSet<Point> Points;
-        private List<Point> FillPoints = new List<Point>();
+        private HashSet<Point> FillPoints = new HashSet<Point>();
 
         public BoundaryFillService(InkCanvas canvas)
         {
@@ -35,7 +35,8 @@ namespace FlowFill.Services
             //  await RecursivePointFillAsync(30, 30);
             await Task.Run(async () =>
             {
-                await ParallelRecursivePointFill(30, 30);
+                await RecursivePointFill(17, 17);
+                await ParallelRecursivePointFill(43, 43);
             });
             /* await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
              {
@@ -44,44 +45,56 @@ namespace FlowFill.Services
         }
         private async Task RecursivePointFill(double x, double y)
         {
-
-                  var watch = Stopwatch.StartNew();
-                  if (await HasStrokeASync(x, y) && x < Width && y < Height && y > 0 && x > 0)
+            await Task.Run(async () =>
+            {
+              //  globalwatch.Start();
+            if (await HasStrokeASync(new Point(x, y)) && x < Width && y < Height && y > 0 && x > 0)
                       return;
-                  Points.Add(new Point(x, y));
+            FillPoints.Add(new Point(x, y));
+  
             // FillPoints.Add(new Point(x, y));
             RecursivePointFill(x + 1, y);
             RecursivePointFill(x - 1, y);
             RecursivePointFill(x, y + 1);
                   RecursivePointFill(x, y - 1);
-
-              watch.Stop();
-              await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-              {
-                  CanvasHelper.CreateStroke(new Point(x, y), inkCanvas);
-              });
-              Debug.WriteLine(Points.Count);
-              Debug.WriteLine(watch.ElapsedMilliseconds);
-        }
-        private async Task ParallelRecursivePointFill(double x, double y)
-        {
-            var watch = Stopwatch.StartNew();
-            if (await HasStrokeASync(x, y) && x < Width && y < Height && y > 0 && x > 0)
-                return;
-            Points.Add(new Point(x, y));
-            // FillPoints.Add(new Point(x, y));
-            Parallel.Invoke(() => RecursivePointFill(x, y + 1),
-                            () => RecursivePointFill(x, y - 1),
-                            () => RecursivePointFill(x + 1, y),
-                            () => RecursivePointFill(x - 1, y));
-            ;
-            watch.Stop();
             await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                CanvasHelper.CreateStroke(new Point(x, y), inkCanvas);
+                CanvasHelper.CreateStrokeBlue(new Point(x, y), inkCanvas);
             });
-            Debug.WriteLine(Points.Count);
-            Debug.WriteLine(watch.ElapsedMilliseconds);
+           // globalwatch.Stop();
+
+           // Debug.WriteLine(Points.Count);
+            //  Debug.WriteLine(globalwatch.ElapsedMilliseconds);
+            });
+        }
+        System.Diagnostics.Stopwatch globalwatch = Stopwatch.StartNew();
+        private async Task ParallelRecursivePointFill(double x, double y)
+        {
+           // globalwatch.Start();
+            if (await HasStrokeASync(new Point(x, y)) && x < Width && y < Height && y > 0 && x > 0)
+            {
+                globalwatch.Stop();
+                return;
+            }
+           // Points.Add(new Point(x, y));
+             FillPoints.Add(new Point(x, y));
+
+            Parallel.Invoke(() => ParallelRecursivePointFill(x, y + 1),
+                            () => ParallelRecursivePointFill(x, y - 1),
+                            () => ParallelRecursivePointFill(x + 1, y),
+                            () => ParallelRecursivePointFill(x - 1, y));
+            ;
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CanvasHelper.CreateStrokeRed(new Point(x, y), inkCanvas);
+            });
+          //  globalwatch.Stop();
+           /* await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                CanvasHelper.CreateStroke(new Point(x, y), inkCanvas);
+            });*/
+           //Debug.WriteLine(Points.Count);
+         //   Debug.WriteLine(globalwatch.ElapsedMilliseconds);
         }
 
         private async Task RecursivePointFillAsync(double x, double y)
@@ -207,14 +220,30 @@ namespace FlowFill.Services
             return HasStroke;
         }
         public async Task<bool> HasStrokeASync(double x, double y)
+        { 
+            bool HasStroke = false;
+           await Task.Run(() =>
+           {
+           if (Points.Contains(new Point(x, y)))
+           HasStroke = true;
+           });
+          return HasStroke;
+        }
+        public async Task<bool> HasStrokeASync(Point p)
         {
             bool HasStroke = false;
             await Task.Run(() =>
             {
-                if (Points.Contains(new Point(x, y)))
-                    HasStroke = true;
-            });
+                HasStroke = Points.Contains(p) || FillPoints.Contains(p);
+        });
             return HasStroke;
+            //  bool HasStroke = false;
+            // await Task.Run(() =>
+            // {
+            // if (Points.Contains(new Point(x, y)))
+            // HasStroke = true;
+            // });
+            //return HasStroke;
         }
     }
 

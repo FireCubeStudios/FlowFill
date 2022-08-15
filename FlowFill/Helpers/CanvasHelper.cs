@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 
@@ -142,7 +143,7 @@ namespace FlowFill.Helpers
         public static void CreateStroke(List<Point> Points, InkCanvas inkCanvas)
         {
                 var strokeBuilder = new InkStrokeBuilder();
-                strokeBuilder.SetDefaultDrawingAttributes(inkCanvas.InkPresenter.CopyDefaultDrawingAttributes()); ;
+                strokeBuilder.SetDefaultDrawingAttributes(inkCanvas.InkPresenter.CopyDefaultDrawingAttributes());
                 InkStroke stkA = strokeBuilder.CreateStroke(Points);
                 inkCanvas.InkPresenter.StrokeContainer.AddStroke(stkA);
         }
@@ -152,7 +153,33 @@ namespace FlowFill.Helpers
             List<Point> Points = new List<Point>();
             Points.Add(new Point(x, y));
             var strokeBuilder = new InkStrokeBuilder();
-            strokeBuilder.SetDefaultDrawingAttributes(inkCanvas.InkPresenter.CopyDefaultDrawingAttributes()); ;
+            strokeBuilder.SetDefaultDrawingAttributes(inkCanvas.InkPresenter.CopyDefaultDrawingAttributes());
+            InkStroke stkA = strokeBuilder.CreateStroke(Points);
+            inkCanvas.InkPresenter.StrokeContainer.AddStroke(stkA);
+        }
+    
+
+        public static void CreateStrokeBlue(Point p, InkCanvas inkCanvas)
+        {
+            var strokeBuilder = new InkStrokeBuilder();
+            List<Point> Points = new List<Point>();
+            Points.Add(p);
+            Points.Add(p);
+            var dr = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
+            dr.Color = Colors.Blue;
+            strokeBuilder.SetDefaultDrawingAttributes(dr);
+            InkStroke stkA = strokeBuilder.CreateStroke(Points);
+            inkCanvas.InkPresenter.StrokeContainer.AddStroke(stkA);
+        }
+        public static void CreateStrokeRed(Point p, InkCanvas inkCanvas)
+        {
+            var strokeBuilder = new InkStrokeBuilder();
+            List<Point> Points = new List<Point>();
+            Points.Add(p);
+            Points.Add(p);
+            var dr = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
+            dr.Color = Colors.Red;
+            strokeBuilder.SetDefaultDrawingAttributes(dr);
             InkStroke stkA = strokeBuilder.CreateStroke(Points);
             inkCanvas.InkPresenter.StrokeContainer.AddStroke(stkA);
         }

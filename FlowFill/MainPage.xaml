@@ -14,6 +14,7 @@
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button Click="DrawSmallButton_Click">Draw small</Button>
             <Button Click="DrawBigButton_Click">Draw BIG</Button>
+            <Button Click="DrawSmallBigButton_Click">Draw small IN BIG</Button>
             <Button Click="DrawTriangleButton_Click">Draw Triangle</Button>
             <AppBarSeparator/>
             <Button Click="PrintButton_Click">Print</Button>

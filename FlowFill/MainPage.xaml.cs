@@ -61,6 +61,11 @@ namespace FlowFill
         {
             CreateSquare(150, 350);
         }
+        private void DrawSmallBigButton_Click(object sender, RoutedEventArgs e)
+        {
+            CreateSquare(150, 250);
+            CreateSquare(205, 235);
+        }
         private void DrawTriangleButton_Click(object sender, RoutedEventArgs e)
         {
             CreateTriangle(150, 350);
